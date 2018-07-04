@@ -4,6 +4,10 @@ import os
 #protoParsings = {"entity": [parsing1, parsing2], "attr": [parsing3, parsing4]}
 protoParsings = {}
 
+#TODO: create StringIterator.
+
+whitespaces = [" ", "\t", "\n"]
+
 def getLTPFiles():
 	filenames = []
 	if os.path.isdir("./parsingSchemes") == False:
@@ -14,8 +18,66 @@ def getLTPFiles():
 			filenames.append(os.path.join("./parsingSchemes", file))
 	return filenames
 
-def getParsings(string):
+def parse(c):
+	if stringIterator.hasNext() == False:
+		return False
+
+	c2 = stringIterator.getNext()
+	return c == c2
+
+def parseString(): #TODO: make this dependant on the element type such that you can say [entity key=value] without the final whitespace. ([entity key=value ]) as well as for the "=" sign (key=value)
+	string = ""
+
+	if stringIterator.hasNext() == False:
+		return ""
+
+	c = stringIterator.getNext()
+	if c == '"' or c == "'": # or c == "'''":
+		quoted = True
+		quotationmark = c
+	else:
+		quoted = False
+	
+	while True:
+		if stringIterator.hasNext() == False:
+			return "" #raise ParsingError
+
+		c = stringIterator.getNext()
+		if quoted == True and c == quotationmark or quoted == False and c in whitespaces:
+			return string
+		else:
+			string += c
+
+def parseKeyValuePair():
+	stringIterator.skipWhites()
+	key = parseString()
+	if parse("=") == False:
+		return []
+	value = parseString()
+	return (key, value)
+	
+def parseElement():
+	protoElement = ProtoElement()
+	stringIterator.skipWhites()
+	protoElement.type = parseString();
+	stringIterator.skipWhites()
+	(key, value) = parseKeyValuePair()
+	protoElement.characteristics[key] = value
+
+def getParsings(string): #TODO: make this a loop to go through all parsings in the file. As well as give an error as to what part of the program gave an error. The error must be given when an unexpected character occured and must print that to the screen and exit the program, without adding to much "raise ValueError"s and error cascading.
 	#protoParsing[type] = parsing
+	level = 0
+	stringIterator.skipWhites()
+	if stringIterator.hasNext() == False:
+		return [] #raise ParsingError
+	c = stringIterator.getNext()
+	if c != "{":
+		return []
+	stringIterator.skipWhites()
+	if stringIterator.hasNext() == False:
+		return [] #raise ParsingError
+	c = stringIterator.getNext()
+	if c == "["
 	pass
 
 def readParsings():
