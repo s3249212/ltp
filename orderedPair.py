@@ -1,3 +1,4 @@
-class orderPair(object):
-	orderedList = []
-	unorderedList = []
+class OrderedPair(object):
+	def __init__(self):
+		self.orderedList = []
+		self.unorderedList = []

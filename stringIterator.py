@@ -1,30 +1,34 @@
+import sys
 whitespaces = [" ", "\t", "\n"]
 
 class StringIterator(object):
-	string = ""
-	size = len(string)
-	i = -1
-	
-	def __init__(string):
+	def __init__(self, string):
 		self.string = string
+		self.size = len(string)
+		self.i = -1
+		#print(string + " " + str(self.size))
 
-	def peek():
-		if hasNext() == False:
+	def peek(self):
+		if self.hasNext() == False:
 			return ""
-		return string[i + 1]
+		return self.string[self.i + 1]
 
-	def hasNext():
-		return i + 1 < size
+	def hasNext(self):
+		#print(str(self.i) + " " + str(self.size))
+		#print("self.string: "+self.string)
+		return self.i + 1 < self.size
 
-	def getNext():
-		c = string[i + 1]
-		i += 1
+	def getNext(self):
+		c = self.string[self.i + 1]
+		self.i += 1
+		#print("c: "+c)
 		return c
 
-	def getCurrent():
-		c = string[i]
+	def getCurrent(self):
+		return self.string[self.i]
 
-	def skipWhites():
-		while hasNext() and peek() in whitespaces:
-			i += 1
+	def skipWhites(self):
+		while self.hasNext() and self.peek() in whitespaces:
+			self.i += 1
+			#print(self.i)
 

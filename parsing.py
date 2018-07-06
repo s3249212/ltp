@@ -4,13 +4,17 @@ class Parsing(object):
 
 	statements = ""
 
-	def __init__():
+	def __init__(self):
+		self.elements = []
+		self.protostatements = ""
+
+		self.statements = ""
 		pass
 
-	def initializeStatements():
+	def initializeStatements(self):
 		pass
 
-	def getStatements():
+	def getStatements(self):
 		pass
 
 	
