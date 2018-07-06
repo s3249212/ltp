@@ -25,7 +25,7 @@ def parse(c):
 	c2 = stringIterator.getNext()
 	return c == c2
 
-def parseString(): #TODO: make this dependant on the element type such that you can say [entity key=value] without the final whitespace. ([entity key=value ]) as well as for the "=" sign (key=value)
+def parseString(endingCharacter): #TODO: make this dependant on the element type such that you can say [entity key=value] without the final whitespace. ([entity key=value ]) as well as for the "=" sign (key=value)
 	string = ""
 
 	if stringIterator.hasNext() == False:
@@ -43,7 +43,7 @@ def parseString(): #TODO: make this dependant on the element type such that you 
 			return "" #raise ParsingError
 
 		c = stringIterator.getNext()
-		if quoted == True and c == quotationmark or quoted == False and c in whitespaces:
+		if quoted == True and c == quotationmark or quoted == False and (c in whitespaces or c == endingCharacter):
 			return string
 		else:
 			string += c
@@ -64,6 +64,23 @@ def parseElement():
 	(key, value) = parseKeyValuePair()
 	protoElement.characteristics[key] = value
 
+def parseScheme():
+	if parse("{") == False:
+		raise ParsingError
+
+	level = 0
+	stringIterator.skipWhites()
+	if stringIterator.hasNext() == False:
+		return [] #raise ParsingError unexpected end of file
+	c = stringIterator.getNext()
+
+	if c == "[":
+		op.ordered.append(parseElement("]"))
+	elif c == "<":
+		op.unordered.append(parseElement(">"))
+	else:
+		raise ParsingError #unexpected element type
+
 def getParsings(string): #TODO: make this a loop to go through all parsings in the file. As well as give an error as to what part of the program gave an error. The error must be given when an unexpected character occured and must print that to the screen and exit the program, without adding to much "raise ValueError"s and error cascading.
 	#protoParsing[type] = parsing
 	level = 0
@@ -79,6 +96,8 @@ def getParsings(string): #TODO: make this a loop to go through all parsings in t
 	c = stringIterator.getNext()
 	if c == "["
 	pass
+
+#for each ltp file, read all parsings (scheme, code, probability)
 
 def readParsings():
 	ltpfiles = getLTPFiles()
