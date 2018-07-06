@@ -56,30 +56,42 @@ def parseKeyValuePair():
 	value = parseString()
 	return (key, value)
 	
-def parseElement():
-	protoElement = ProtoElement()
-	stringIterator.skipWhites()
-	protoElement.type = parseString();
-	stringIterator.skipWhites()
-	(key, value) = parseKeyValuePair()
-	protoElement.characteristics[key] = value
+def parseElement(endCharacter):
+	stringElement.skipWhites()
+	if parsePeek("{"):
+		protoElement = parseScheme()
+	else:
+		protoElement = ProtoElement()
+		stringIterator.skipWhites()
+		protoElement.type = parseString()
+		while stringIterator.peek() != endCharacter:
+			stringIterator.skipWhites()
+			(key, value) = parseKeyValuePair()
+			protoElement.characteristics[key] = value
+			stringIterator.skipWhites()
+	return protoElement
+	
 
 def parseScheme():
 	if parse("{") == False:
 		raise ParsingError
 
 	level = 0
+	op = OrderPair()
 	stringIterator.skipWhites()
-	if stringIterator.hasNext() == False:
-		return [] #raise ParsingError unexpected end of file
-	c = stringIterator.getNext()
-
-	if c == "[":
-		op.ordered.append(parseElement("]"))
-	elif c == "<":
-		op.unordered.append(parseElement(">"))
-	else:
-		raise ParsingError #unexpected element type
+	while stringIterator.peek() != "}":
+		if stringIterator.hasNext() == False:
+			return [] #raise ParsingError unexpected end of file
+		c = stringIterator.getNext()
+		if c == "[":
+			op.ordered.append(parseElement("]"))
+		elif c == "<":
+			op.unordered.append(parseElement(">"))
+		else:
+			raise ParsingError #unexpected element type
+		stringIterator.skipWhites()
+	stringIterator.getNext()
+	return op
 
 def getParsings(string): #TODO: make this a loop to go through all parsings in the file. As well as give an error as to what part of the program gave an error. The error must be given when an unexpected character occured and must print that to the screen and exit the program, without adding to much "raise ValueError"s and error cascading.
 	#protoParsing[type] = parsing
