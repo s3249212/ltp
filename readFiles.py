@@ -42,18 +42,22 @@ def parseString(endingCharacter): #TODO: make this dependant on the element type
 		if stringIterator.hasNext() == False:
 			return "" #raise ParsingError
 
-		c = stringIterator.getNext()
-		if quoted == True and c == quotationmark or quoted == False and (c in whitespaces or c == endingCharacter):
+		c = stringIterator.peek()
+		if quoted == False and c == endingCharacter:
+			return string
+
+		stringIterator.getNext()
+		if quoted == True and c == quotationmark or quoted == False and c in whitespaces:
 			return string
 		else:
 			string += c
 
-def parseKeyValuePair():
+def parseKeyValuePair(endCharacter):
 	stringIterator.skipWhites()
-	key = parseString()
+	key = parseString(endCharacter)
 	if parse("=") == False:
-		return []
-	value = parseString()
+		return (1,1) #raise ParsingError
+	value = parseString(endCharacter)
 	return (key, value)
 	
 def parseElement(endCharacter):
@@ -66,7 +70,7 @@ def parseElement(endCharacter):
 		protoElement.type = parseString()
 		while stringIterator.peek() != endCharacter:
 			stringIterator.skipWhites()
-			(key, value) = parseKeyValuePair()
+			(key, value) = parseKeyValuePair(endCharacter)
 			protoElement.characteristics[key] = value
 			stringIterator.skipWhites()
 	return protoElement
@@ -97,17 +101,18 @@ def getParsings(string): #TODO: make this a loop to go through all parsings in t
 	#protoParsing[type] = parsing
 	level = 0
 	stringIterator.skipWhites()
-	if stringIterator.hasNext() == False:
-		return [] #raise ParsingError
-	c = stringIterator.getNext()
-	if c != "{":
-		return []
-	stringIterator.skipWhites()
-	if stringIterator.hasNext() == False:
-		return [] #raise ParsingError
-	c = stringIterator.getNext()
-	if c == "["
-	pass
+	return parseScheme()
+	#if stringIterator.hasNext() == False:
+	#	return [] #raise ParsingError
+	#c = stringIterator.getNext()
+	#if c != "{":
+	#	return []
+	#stringIterator.skipWhites()
+	#if stringIterator.hasNext() == False:
+	#	return [] #raise ParsingError
+	#c = stringIterator.getNext()
+	#if c == "["
+	#pass
 
 #for each ltp file, read all parsings (scheme, code, probability)
 
