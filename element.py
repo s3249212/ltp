@@ -1,13 +1,11 @@
 class Element(object):
-	elementType = "entity"
-	characteristics =  {"length": 20, "begin": 2}
-
-	tokenList = []
-
-	parsings = []
-
 	def __init__():
-		pass
+		self.elementType = ""
+		self.characteristics =  {}
+
+		self.tokenList = []
+
+		self.parsings = []
 
 	def createParsingsHelper2(orderedPair, tokens, protoelement):
 		returnList = []
@@ -21,7 +19,7 @@ class Element(object):
 					tokens.remove(t)
 					element.tokenList.append(t)
 				if bool:
-					parsings = createParsingsHelper(orderedPair, tokens)
+					parsings = self.createParsingsHelper(orderedPair, tokens)
 					for p in parsings:
 						p.elements = [element] + p.elements
 					return parsings
@@ -36,7 +34,7 @@ class Element(object):
 					break
 			element = Element()
 			element.characteristics = protoelement.characteristics.copy()
-			parsings = createParsingsHelper(orderedPair, tokens)
+			parsings = self.createParsingsHelper(orderedPair, tokens)
 			for p in parsings:
 				p.elements = [element] + p.elements
 			returnList += parsings
@@ -62,15 +60,17 @@ class Element(object):
 			op = OrderedPair()
 			op.orderedList = orderedPair.orderedList.copy().remove(element)
 			op.unorderedList = orderedPair.unorderedList.copy()
-			returnList += createParsingsHelper2(op, tokens, element)
+			returnList += self.createParsingsHelper2(op, tokens, element)
+		return returnList
 
 	def createParsings():
 		if not self.elementType in protoParsings:
 			print("ElementType not supported by the ltp files: " + self.elementType)
 
 		parsings = []
+		tokens = nlp(self.tokenList)
 		for p in protoParsings[self.elementType]:
-			for c in createParsingsHelper(p.op, tokens):
+			for c in self.createParsingsHelper(p.op, tokens):
 				c.code = p.code.copy()
 				parsings.append(c)
 		self.parsings = parsings
