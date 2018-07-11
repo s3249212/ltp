@@ -14,5 +14,5 @@ while True:
 	e = Element()
 	e.tokenList = tokens
 	e.elementType = t
-	element.createParsings()
+	e.createParsings()
 	print(c.parsings)

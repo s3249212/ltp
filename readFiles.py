@@ -164,6 +164,10 @@ def getParsings(string): #TODO: make this a loop to go through all parsings in t
 
 #for each ltp file, read all parsings (scheme, code, probability)
 
+def getProtoParsings():
+	global protoParsings
+	return protoParsings
+
 def readParsings():
 	ltpfiles = getLTPFiles()
 	for f in ltpfiles:

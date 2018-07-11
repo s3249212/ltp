@@ -1,5 +1,6 @@
+from readFiles import *
 class Element(object):
-	def __init__():
+	def __init__(self):
 		self.elementType = ""
 		self.characteristics =  {}
 
@@ -7,7 +8,7 @@ class Element(object):
 
 		self.parsings = []
 
-	def createParsingsHelper2(orderedPair, tokens, protoelement):
+	def createParsingsHelper2(self, orderedPair, tokens, protoelement):
 		returnList = []
 		element = Element()
 		element.characteristics = protoelement.characteristics.copy()
@@ -41,12 +42,12 @@ class Element(object):
 		return returnList
 				
 
-	def createParsingsHelper(orderedPair, tokens):
+	def createParsingsHelper(self, orderedPair, tokens):
 		#base case
-		if orderedPair.orderedList == [] and orderedPair.unorderedList == [] and tokens = []:
+		if orderedPair.orderedList == [] and orderedPair.unorderedList == [] and tokens == []:
 			parsing = Parsing()
 			return [parsing]
-		if orderedPair.orderedList == [] and orderedPair.unorderedList == [] or tokens = []:
+		if orderedPair.orderedList == [] and orderedPair.unorderedList == [] or tokens == []:
 			return []
 
 		returnList = []
@@ -54,7 +55,7 @@ class Element(object):
 		op = OrderedPair()
 		op.orderedList = orderedPair.orderedList.copy().remove(element)
 		op.unorderedList = orderedPair.unorderedList.copy()
-		returnList += createParsingsHelper2(op, tokens, element)
+		returnList += self.createParsingsHelper2(op, tokens, element)
 
 		for element in orderedPair.unorderedList.copy():
 			op = OrderedPair()
@@ -63,18 +64,19 @@ class Element(object):
 			returnList += self.createParsingsHelper2(op, tokens, element)
 		return returnList
 
-	def createParsings():
+	def createParsings(self):
 		if not self.elementType in protoParsings:
 			print("ElementType not supported by the ltp files: " + self.elementType)
 
 		parsings = []
-		tokens = nlp(self.tokenList)
-		for p in protoParsings[self.elementType]:
+		#tokens = nlp(self.tokenList)
+		tokens = [t for t in self.tokenList]
+		for p in getProtoParsings()[self.elementType]:
 			for c in self.createParsingsHelper(p.op, tokens):
 				c.code = p.code.copy()
 				parsings.append(c)
 		self.parsings = parsings
 		pass
 
-	def getStatements():
+	def getStatements(self):
 		pass
