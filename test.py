@@ -7,6 +7,7 @@ nlp = spacy.load("en")
 print("Done")
 print("Loading parsings...")
 readParsings()
+print("Done loading parsings")
 while True:
 	s = input()
 	t = input()
@@ -15,4 +16,4 @@ while True:
 	e.tokenList = tokens
 	e.elementType = t
 	e.createParsings()
-	print(c.parsings)
+	print(e.parsings)

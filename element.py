@@ -44,6 +44,11 @@ class Element(object):
 
 	def createParsingsHelper(self, orderedPair, tokens):
 		#base case
+		print("")
+		print(orderedPair.orderedList)
+		print(orderedPair.unorderedList)
+		print(tokens)
+		print("")
 		if orderedPair.orderedList == [] and orderedPair.unorderedList == [] and tokens == []:
 			parsing = Parsing()
 			return [parsing]
@@ -51,9 +56,12 @@ class Element(object):
 			return []
 
 		returnList = []
+		#print("Ordered pair")
+		#print(orderedPair)
 		element = orderedPair.orderedList[0]
 		op = OrderedPair()
-		op.orderedList = orderedPair.orderedList.copy().remove(element)
+		op.orderedList = orderedPair.orderedList.copy()
+		op.orderedList.remove(element)
 		op.unorderedList = orderedPair.unorderedList.copy()
 		returnList += self.createParsingsHelper2(op, tokens, element)
 
@@ -61,6 +69,7 @@ class Element(object):
 			op = OrderedPair()
 			op.orderedList = orderedPair.orderedList.copy().remove(element)
 			op.unorderedList = orderedPair.unorderedList.copy()
+			op.unorderedList.remove(element)
 			returnList += self.createParsingsHelper2(op, tokens, element)
 		return returnList
 

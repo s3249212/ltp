@@ -5,6 +5,7 @@ from parsingError import *
 from orderedPair import *
 from protoElement import *
 from protoParsing import *
+from spacyFunctions import *
 #protoParsings = {"entity": [parsing1, parsing2], "attr": [parsing3, parsing4]}
 protoParsings = {}
 
@@ -43,7 +44,7 @@ def parseString(endingCharacter): #TODO: make this dependant on the element type
 
 	global i
 	i += 1
-	print(i)
+	#print(i)
 	if stringIterator.hasNext() == False:
 		raise ParsingError #return ""
 
@@ -61,12 +62,12 @@ def parseString(endingCharacter): #TODO: make this dependant on the element type
 
 		c = stringIterator.peek()
 		if quoted == False and c == endingCharacter:
-			print(string)
+			#print(string)
 			return string
 
 		stringIterator.getNext()
 		if quoted == True and c == quotationmark or quoted == False and c in whitespaces:
-			print(string)
+			#print(string)
 			return string
 		else:
 			string += c
@@ -102,9 +103,9 @@ def parseScheme():
 
 	level = 0
 	op = OrderedPair()
-	print(len(op.orderedList))
-	for o in op.orderedList:
-		print(o.type)
+	#print(len(op.orderedList))
+	#for o in op.orderedList:
+	#	print(o.type)
 	stringIterator.skipWhites()
 	while stringIterator.peek() != "}":
 		if stringIterator.hasNext() == False:
@@ -116,8 +117,8 @@ def parseScheme():
 			op.unorderedList.append(parseElement(">"))
 		else:
 			raise ParsingError #unexpected element type
-		for o in op.orderedList:
-			print("o characteristics: "+str(o.characteristics))
+		#for o in op.orderedList:
+		#	print("o characteristics: "+str(o.characteristics))
 		stringIterator.skipWhites()
 	stringIterator.getNext()
 	return op
@@ -135,11 +136,11 @@ def parseCode():
 
 def getParsings(string): #TODO: make this a loop to go through all parsings in the file. As well as give an error as to what part of the program gave an error. The error must be given when an unexpected character occured and must print that to the screen and exit the program, without adding to much "raise ValueError"s and error cascading.
 	#protoParsing[type] = parsing
-	print(string)
+	#print(string)
 	level = 0
 	global stringIterator
 	stringIterator = StringIterator(string)
-	print(stringIterator.string)
+	#print(stringIterator.string)
 	parsings = []
 	stringIterator.skipWhites()
 	while stringIterator.hasNext():
@@ -177,7 +178,7 @@ def readParsings():
 		type = os.path.splitext(base)[0]
 		if type in protoParsings:
 			pass
-		print(type)
+		#print(type)
 		protoParsings[type] = getParsings(string)
 		F.close()
 
@@ -196,8 +197,8 @@ def printParsings():
 				print("\t\t"+o.type)
 				for a, b in o.characteristics.items():
 					print("\t\t"+a + ": " + b)
-readParsings()
-printParsings()
+#readParsings()
+#printParsings()
 #print(getLTPFiles())
 #print(protoParsings["entity"][0].op.orderedList[0].type)
 #print(protoParsings)
